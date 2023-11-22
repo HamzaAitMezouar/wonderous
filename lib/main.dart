@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: PhotoGallery(
+      home: const PhotoGallery(
         collectionId: "id",
         imageSize: Size(200, 350),
         wonderType: WonderType.colosseum,
@@ -77,7 +77,7 @@ class _PhotoGalleryState extends State<PhotoGallery> {
   Offset _lastSwipeDir = Offset.zero;
   final double _scale = 1;
   bool _skipNextOffsetTween = false;
-  late Duration swipeDuration = Duration(milliseconds: 600) * .4;
+  late Duration swipeDuration = const Duration(milliseconds: 600) * .4;
   final _photoIds = ValueNotifier<List<String>>([
     "assets/crys_bl.png",
     "assets/crys_gr.png",
@@ -232,12 +232,15 @@ class _PhotoGalleryState extends State<PhotoGallery> {
     if (dir.dy != 0) newIndex += _gridSize * (dir.dy > 0 ? -1 : 1);
     if (dir.dx != 0) newIndex += (dir.dx > 0 ? -1 : 1);
     // After calculating new index, exit early if we don't like it...
-    if (newIndex < 0 || newIndex > _imgCount - 1)
+    if (newIndex < 0 || newIndex > _imgCount - 1) {
       return; // keep the index in range
-    if (dir.dx < 0 && newIndex % _gridSize == 0)
+    }
+    if (dir.dx < 0 && newIndex % _gridSize == 0) {
       return; // prevent right-swipe when at right side
-    if (dir.dx > 0 && newIndex % _gridSize == _gridSize - 1)
+    }
+    if (dir.dx > 0 && newIndex % _gridSize == _gridSize - 1) {
       return; // prevent left-swipe when at left side
+    }
     _lastSwipeDir = dir;
     //  AppHaptics.lightImpact();
     _setIndex(newIndex);
@@ -274,9 +277,9 @@ class _PhotoGalleryState extends State<PhotoGallery> {
 
     imgSize = (widget.imageSize ?? imgSize) * _scale;
     // Get transform offset for the current _index
-    final padding = 10.0;
+    const padding = 10.0;
     var gridOffset = _calculateCurrentOffset(padding, imgSize);
-    gridOffset += Offset(0, -20 / 2);
+    gridOffset += const Offset(0, -20 / 2);
     final offsetTweenDuration =
         _skipNextOffsetTween ? Duration.zero : swipeDuration;
     final cutoutTweenDuration =
@@ -306,7 +309,7 @@ class _PhotoGalleryState extends State<PhotoGallery> {
               builder: (_, value, child) =>
                   Transform.translate(offset: value, child: child),
               child: GridView.count(
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: _gridSize,
                 childAspectRatio: imgSize.aspectRatio,
                 mainAxisSpacing: padding,
@@ -386,7 +389,7 @@ class _MyHomePageState extends State<MyHomePage> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(15),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                       color: Colors.grey,
                       offset: Offset(2, 2),
@@ -494,7 +497,7 @@ class _CutoutClipper extends CustomClipper<Path> {
             padY,
             size.width - padX,
             size.height - padY,
-            Radius.circular(6),
+            const Radius.circular(6),
           ),
         )
         ..close(),
